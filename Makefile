@@ -1,12 +1,12 @@
-# define C compilers and flags
 CC = gcc
-CFLAGS = -Wall -g
+CFLAGS = -Wall -Wextra -g
 
-# resource files
-OBJ = detect.o
+SRC = src/main.c \
+
+OBJ = $(SRC:.c=.o)
 
 detect: $(OBJ) Makefile
 	$(CC) $(CFLAGS) -o detect $(OBJ)
 
 clean: 
-	rm -f $(OBJ) detect *.o
+	rm -f $(OBJ) detect
