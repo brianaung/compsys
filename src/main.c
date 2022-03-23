@@ -2,31 +2,33 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <stdbool.h>
+
+#include "utils.h"
 
 int main(int argc, char **argv) {
 
     /* get the filename */
     char* input_file = NULL;
+    bool compute_time = false;
+    bool do_challenge = false;
     for (int i=0; i < argc; i++) {
         if (strcmp(argv[i], "-f") == 0) {
             input_file = argv[i+1];
-            break;
+        } else if (strcmp(argv[i], "-e") == 0) {
+            compute_time = true;   
+        } else if (strcmp(argv[i], "-c") == 0) {
+            do_challenge = true;
         }
     }
 
-    /* open the file */
-    FILE* file = fopen(input_file, "r");
-    assert(file);
+    /* store process structs in an array */
+    int num_processes = 0;
+    struct process* processes;
+    processes = (struct process*) malloc(sizeof(struct process)*INI_ARR_SIZE);
+    assert(processes);
+    save_processes(input_file, &processes, &num_processes);
 
-    int process_id;
-    int locked_file_id; 
-    int requested_file_id; 
-    while (fscanf(file, "%d %d %d", &process_id, &locked_file_id, &requested_file_id) == 3) {
-        printf("%d %d %d\n", process_id, locked_file_id, requested_file_id); 
-    }
-
-    fclose(file);
-    /**************************/
 
     return 0;
 }
