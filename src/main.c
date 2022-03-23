@@ -29,6 +29,22 @@ int main(int argc, char **argv) {
     assert(processes);
     save_processes(input_file, &processes, &num_processes);
 
+    /* TASK 1 */
+    int num_files = 0;
+    for (int i=0; i<num_processes; i++) {
+        if (i == 0) {
+            num_files = 2;
+            continue;
+        }
+        if (check_files(processes, num_processes, i, processes[i].locked_file_id, 2)) {
+            num_files++;
+        }
+        if (check_files(processes, num_processes, i, processes[i].requested_file_id, 2)) {
+            num_files++;
+        }
+    }
+
+    printf("Processes %d\nFiles %d\n", num_processes, num_files);
 
     return 0;
 }
