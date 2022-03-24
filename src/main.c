@@ -36,15 +36,35 @@ int main(int argc, char **argv) {
             num_files = 2;
             continue;
         }
-        if (check_files(processes, num_processes, i, processes[i].locked_file_id, 2)) {
+        if (check_files(processes, num_processes, i, processes[i].locked_file_id, 2, NULL)) {
             num_files++;
         }
-        if (check_files(processes, num_processes, i, processes[i].requested_file_id, 2)) {
+        if (check_files(processes, num_processes, i, processes[i].requested_file_id, 2, NULL)) {
             num_files++;
         }
     }
-
     printf("Processes %d\nFiles %d\n", num_processes, num_files);
+
+    /* TASK 2 */
+    int highest_occurrence = 0;
+    if (compute_time) {
+        // do task 2
+        int k = 1;
+        int execution_time = 0;
+
+        if (num_processes) {
+            execution_time += 1;
+            
+            for (int i=0; i<num_processes; i++) {
+                int occurrence = 1;
+                if (check_files(processes, num_processes, i, 
+                            processes[i].requested_file_id, 1, &occurrence)) {
+                    if (occurrence > highest_occurrence) { highest_occurrence = occurrence; }
+                }
+            }
+        }
+        printf("Execution time %d\n", execution_time + highest_occurrence);
+    }
 
     return 0;
 }
