@@ -31,28 +31,40 @@ void save_processes(char* input_file, struct process** p, int* num_processes) {
     *p = processes;
 }
 
-int check_files(struct process* processes, int num_process, int curr_process, int curr_file, int cmp_flag) {
+int check_files(struct process* processes, int num_process, int curr_process, int curr_file, int cmp_flag, int* occurrence) {
     assert((curr_process < num_process) && (curr_process >= 0));
     int j = curr_process - 1;
 
     switch (cmp_flag) {
         case CMP_LOCKED:
             while (j >= 0) {
-                if (curr_file == processes[j].locked_file_id) { return 0; }
+                if ((curr_file == processes[j].locked_file_id) && (occurrence == NULL)) { 
+                    return 0;
+                } else if (curr_file == processes[j].locked_file_id) {
+                    (*occurrence)++;
+                }
                 j--;
             }
             break;
         case CMP_REQUESTED:
             while (j >= 0) {
-                if (curr_file == processes[j].requested_file_id) { return 0; }
+                if ((curr_file == processes[j].requested_file_id) && (occurrence == NULL)) { 
+                    return 0;
+                } else if (curr_file == processes[j].requested_file_id) {
+                    (*occurrence)++;
+                }
                 j--;
             }
             break;
         case CMP_BOTH:
             while (j >= 0) {
-                if ((curr_file == processes[j].locked_file_id) ||
-                        (curr_file == processes[j].requested_file_id)) { 
+                if (((curr_file == processes[j].locked_file_id) || 
+                        (curr_file == processes[j].requested_file_id)) && 
+                        (occurrence == NULL)) { 
                     return 0; 
+                } else if ((curr_file == processes[j].locked_file_id) || 
+                        (curr_file == processes[j].requested_file_id)) {
+                    (*occurrence)++;
                 }
                 j--;
             }
@@ -61,5 +73,6 @@ int check_files(struct process* processes, int num_process, int curr_process, in
             printf("please enter flag value between 0 to 2");
             break;
     }
+    /* no match */
     return 1;
 }

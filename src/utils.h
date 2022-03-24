@@ -11,4 +11,4 @@ struct process {
 
 void save_processes(char* input_file, struct process** processes, int* num_processes);
 
-int check_files(struct process* processes, int num_processes, int curr_process, int curr_file, int cmp_flag);
+int check_files(struct process* processes, int num_processes, int curr_process, int curr_file, int cmp_flag, int* occurrence);
