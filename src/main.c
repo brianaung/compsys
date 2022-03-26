@@ -82,7 +82,7 @@ int main(int argc, char **argv) {
     }
 
     if (to_break_count) {
-        printf("Deadlock Detected\nTerminate ");
+        printf("Deadlock detected\nTerminate ");
         for (int i=0; i<to_break_count; i++) {
             printf("%d ", to_break[i]);
         }
