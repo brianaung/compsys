@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <limits.h>
 
 #include "rag.h"
 #include "dfs.h"
@@ -12,8 +13,15 @@ int visit_dfs(struct graph* rag, struct node visited[], int* visited_count, int 
     t = rag->adj_list[k];
     parent = t;
 
+    int smallest_id = INT_MAX;
+
     while (t!=NULL) {
         set_visited(visited, visited_count, t);
+
+        // keep track of the smallest id process in current path
+        if ((t->type == 'p') && (t->vertex < smallest_id)) {
+            smallest_id = t->vertex;
+        }
 
         // go to the adjacent node in list
         int k = -1;
@@ -29,9 +37,10 @@ int visit_dfs(struct graph* rag, struct node visited[], int* visited_count, int 
         // else all visited then no deadlock
         if (k == -1) { 
             if (cmp_node(t->next, parent)) {
-                return 1;
+                // graph is a cycle -> return the process with smallest id
+                return smallest_id;
             } else {
-                return 0;
+                return -1;
             }
 
         } else {
