@@ -3,6 +3,8 @@ CFLAGS = -Wall -Wextra -g
 
 SRC = src/main.c \
 	  src/utils.c \
+	  src/rag.c \
+	  src/dfs.c \
 
 OBJ = $(SRC:.c=.o)
 
