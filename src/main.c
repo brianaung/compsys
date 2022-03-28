@@ -31,6 +31,14 @@ int main(int argc, char **argv) {
     assert(processes);
     save_processes(input_file, &processes, &num_processes);
 
+    /* build the resource allocation graph */
+    int adj_size = num_processes * 2;
+    struct graph* rag = init_graph(adj_size);
+    for (int i=0, j=0; i<num_processes; i++, j+=2) {
+        add_edge(rag, j, processes[i].process_id, 'p', processes[i].requested_file_id, 'r'); 
+        add_edge(rag, j+1, processes[i].locked_file_id, 'r', processes[i].process_id, 'p'); 
+    }
+
     /* TASK 1 */
     int num_files = 0;
     for (int i=0; i<num_processes; i++) {
@@ -47,9 +55,9 @@ int main(int argc, char **argv) {
         if (!check_files(processes, num_processes, i, processes[i].requested_file_id, 2, NULL)) {
             num_files++;
         }
-        /***************************************************************************/
     }
     printf("Processes %d\nFiles %d\n", num_processes, num_files);
+    /***************************************************************************/
 
 
     /* TASK 2 */
@@ -83,12 +91,6 @@ int main(int argc, char **argv) {
             visited[i].type = 0;
         }
 
-        int adj_size = num_processes * 2;
-        struct graph* rag = init_graph(adj_size);
-        for (int i=0, j=0; i<num_processes; i++, j+=2) {
-            add_edge(rag, j, processes[i].process_id, 'p', processes[i].requested_file_id, 'r'); 
-            add_edge(rag, j+1, processes[i].locked_file_id, 'r', processes[i].process_id, 'p'); 
-        }
 
         int to_terminate[num_processes];
         int terminate_count = 0;
@@ -111,6 +113,9 @@ int main(int argc, char **argv) {
             printf("No deadlocks\n");
         }
     }
+
+    free_graph(rag, adj_size);
+    free(processes);
     
     return 0;
 }

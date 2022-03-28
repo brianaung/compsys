@@ -41,3 +41,12 @@ void add_edge(struct graph* rag, int curr_process, int src, char src_type, int d
 int cmp_node(struct node* n1, struct node* n2) {
     return ((n1->vertex == n2->vertex) && (n1->type == n2->type));
 }
+
+void free_graph(struct graph* rag, int adj_size) {
+    for (int i=0; i<adj_size; i++) {
+        free(rag->adj_list[i]->next);
+        free(rag->adj_list[i]);
+    }
+    free(rag->adj_list);
+    free(rag);
+}

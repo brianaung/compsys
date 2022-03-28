@@ -76,7 +76,6 @@ int check_files(struct process* processes, int num_process, int curr_process,
             }
             break;
     }
-
     if (count != NULL) { *count = k; }
 
     return ret;
