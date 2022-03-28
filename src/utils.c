@@ -38,7 +38,6 @@ int check_files(struct process* processes, int num_process, int curr_process,
 
     int j = curr_process - 1;
     /* default for no match, otherwise returns the lowest matching process id */
-    int ret = -1; 
 
     /* if count is not required to keep track of then just use dummy number */
     int k = 0;
@@ -51,7 +50,7 @@ int check_files(struct process* processes, int num_process, int curr_process,
             while (j >= 0) {
                 if (curr_file == processes[j].locked_file_id) {
                     k++;
-                    ret = j; // or should i use ==> if ((ret > -1) && (j < ret)) { ret = j; } ... because we want the lowest id
+                    return 1;
                 }
                 j--;
             }
@@ -60,7 +59,7 @@ int check_files(struct process* processes, int num_process, int curr_process,
             while (j >= 0) {
                 if (curr_file == processes[j].requested_file_id) {
                     k++;
-                    ret = j;
+                    return 1;
                 }
                 j--;
             }
@@ -70,7 +69,7 @@ int check_files(struct process* processes, int num_process, int curr_process,
                 if ((curr_file == processes[j].locked_file_id) || 
                         (curr_file == processes[j].requested_file_id)) {
                     k++;
-                    ret = j;
+                    return 1;
                 }
                 j--;
             }
@@ -79,5 +78,5 @@ int check_files(struct process* processes, int num_process, int curr_process,
 
     if (count != NULL) { *count = k; }
 
-    return ret;
+    return 0;
 }
