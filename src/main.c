@@ -1,3 +1,8 @@
+/* Program: Deadlock Detection
+ * Author: Brian Soe Khant Aung (1166368)
+ * Date: March 29th 2022
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
@@ -13,15 +18,16 @@ int main(int argc, char **argv) {
     /* get the filename */
     char* input_file = NULL;
     bool compute_time = false;
-    bool do_challenge = false;
+    // bool do_challenge = false;
     for (int i=0; i < argc; i++) {
         if (strcmp(argv[i], "-f") == 0) {
             input_file = argv[i+1];
         } else if (strcmp(argv[i], "-e") == 0) {
             compute_time = true;   
-        } else if (strcmp(argv[i], "-c") == 0) {
-            do_challenge = true;
-        }
+        } 
+        // else if (strcmp(argv[i], "-c") == 0) {
+        //     do_challenge = true;
+        // }
     }
 
     /* store process structs in an array */
@@ -57,7 +63,6 @@ int main(int argc, char **argv) {
         }
     }
     printf("Processes %d\nFiles %d\n", num_processes, num_files);
-    /***************************************************************************/
 
 
     /* TASK 2 */
@@ -82,8 +87,9 @@ int main(int argc, char **argv) {
         printf("Execution time %d\n", execution_time + highest_occurrence);
     }
 
-    /* TASK 3 */
+    /* TASK 3, 4, 5 */
     if (!compute_time) {
+        /* create and initialised the visited array */
         int visited_count = 0;
         struct node visited[num_processes + num_files];
         for (int i=0; i<(num_processes + num_files); i++) {
@@ -91,7 +97,7 @@ int main(int argc, char **argv) {
             visited[i].type = 0;
         }
 
-
+        /* do a dfs to detect deadlocks and get processes to terminate */
         int to_terminate[num_processes];
         int terminate_count = 0;
         while (get_unvisited(rag, visited, &visited_count) != -1) {
@@ -114,6 +120,7 @@ int main(int argc, char **argv) {
         }
     }
 
+    /* housekeeping */
     free_graph(rag, adj_size);
     free(processes);
     

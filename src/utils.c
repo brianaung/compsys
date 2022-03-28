@@ -31,21 +31,28 @@ void save_processes(char* input_file, struct process** p, int* num_processes) {
     *p = processes;
 }
 
+/* for the given file, check whether the file has been encountered before.
+ * if so, keep track of the count it has been encountered.
+ * cmp_flag: 0 - check with locked files only.
+ *           1 - check with requested files only.
+ *           2 - check with both files.
+ *
+ * return: 0 - this file has not been encountered before.
+ *         1 - this file has been encountered before.
+ */
 int check_files(struct process* processes, int num_process, int curr_process, 
         int curr_file, int cmp_flag, int* count) {
     /* make sure current process is not outside the range*/
     assert((curr_process < num_process) && (curr_process >= 0));
 
     int j = curr_process - 1;
-    /* default for no match, otherwise returns the lowest matching process id */
     int ret = 0;
 
     /* if count is not required to keep track of then just use dummy number */
     int k = 0;
-    if (count != NULL) {
-        k = *count;
-    }
+    if (count != NULL) { k = *count; }
 
+    /* perform tests based on the given flag */
     switch (cmp_flag) {
         case CMP_LOCKED:
             while (j >= 0) {
@@ -76,7 +83,8 @@ int check_files(struct process* processes, int num_process, int curr_process,
             }
             break;
     }
-    if (count != NULL) { *count = k; }
 
+    /* housekeeping */
+    if (count != NULL) { *count = k; }
     return ret;
 }
